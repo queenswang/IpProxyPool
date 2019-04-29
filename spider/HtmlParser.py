@@ -22,8 +22,8 @@ class Parser(object):
     def xpathParse(self, response, parser):
         proxylist = []
         root = etree.HTML(response)
-        proxys = root.xpath(parser['pattern'])
-        for proxy in proxys:
+        proxies = root.xpath(parser['pattern'])
+        for proxy in proxies:
             try:
                 ip = proxy.xpath(parser['position']['ip'])[0].text
                 port = proxy.xpath(parser['position']['port'])[0].text

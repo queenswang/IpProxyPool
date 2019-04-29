@@ -6,7 +6,7 @@ from config import config
 BaseModel = declarative_base()
 
 class Proxy(BaseModel):
-    __tablename__ = 'proxys'
+    __tablename__ = 'proxies'
     id = Column(Integer, primary_key=True, autoincrement=True)
     ip = Column(VARCHAR(16), nullable=False)
     port = Column(Integer, nullable=False)

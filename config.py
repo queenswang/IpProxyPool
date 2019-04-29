@@ -170,7 +170,7 @@ class config():
     MAX_DOWNLOAD_CONCURRENT = 3  # 从免费代理网站下载时的最大并发
     CHECK_WATI_TIME = 1  # 进程数达到上限时的等待时间
 
-    CHECK_PROXY = "baidu_check"
+    CHECK_PROXY = "taobao_check"
     QQWRY_PATH = os.path.dirname(__file__) + "/data/qqwry.dat"
     @staticmethod
     def get_header():

@@ -49,7 +49,7 @@ class IpCrawl(object):
                 sys.stdout.write(str + "\r\n")
                 sys.stdout.flush()
 
-            time.sleep(config.UPDATE_TIME)
+            # time.sleep(config.UPDATE_TIME)
 
     def crawl(self, parser):
         html_parser = Parser()

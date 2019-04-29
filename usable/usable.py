@@ -10,6 +10,8 @@ import os
 import gevent
 from gevent import monkey
 monkey.patch_all()
+import threading
+lock = threading.Lock()
 
 import chardet
 
@@ -68,10 +70,14 @@ def detect_from_db(proxy, proxies_set):
 
     else:
         if proxy[2] < 1:
+            lock.acquire()
             sqlhelper.delete({'ip': proxy[0], 'port': proxy[1]})
+            lock.release()
         else:
             score = proxy[2]-1
+            lock.acquire()
             sqlhelper.update({'ip': proxy[0], 'port': proxy[1]}, {'score': score})
+            lock.release()
             proxy_str = '{}:{}'.format(proxy[0], proxy[1])
             proxies_set.add(proxy_str)
 
@@ -181,6 +187,49 @@ def baidu_check(proxies):
         start = time.time()
         r = requests.get(url='https://www.baidu.com', headers=config.get_header(), timeout=config.TIMEOUT, proxies=proxies)
         print("使用代理{}访问百度：".format(proxies, r.status_code))
+        r.encoding = chardet.detect(r.content)['encoding']
+        if r.ok:
+            speed = round(time.time() - start, 2)
+            protocol= 0
+            types=0
+
+        else:
+            speed = -1
+            protocol= -1
+            types=-1
+    except Exception as e:
+            speed = -1
+            protocol = -1
+            types = -1
+    return protocol, types, speed
+
+def taobao_check(proxies):
+    '''
+    用来检测代理的类型，突然发现，免费网站写的信息不靠谱，还是要自己检测代理的类型
+    :param
+    :return:
+    '''
+    protocol = -1
+    types = -1
+    speed = -1
+    # try:
+    #     #http://ip.chinaz.com/getip.aspx挺稳定，可以用来检测ip
+    #     r = requests.get(url=config.TEST_URL, headers=config.get_header(), timeout=config.TIMEOUT,
+    #                      proxies=proxies)
+    #     r.encoding = chardet.detect(r.content)['encoding']
+    #     if r.ok:
+    #         if r.text.find(selfip)>0:
+    #             return protocol, types, speed
+    #     else:
+    #         return protocol,types,speed
+    #
+    #
+    # except Exception as e:
+    #     return protocol, types, speed
+    try:
+        start = time.time()
+        r = requests.get(url='https://www.taobao.com', headers=config.get_header(), timeout=config.TIMEOUT, proxies=proxies)
+        print("使用代理{}访问淘宝：{}".format(proxies, r.status_code))
         r.encoding = chardet.detect(r.content)['encoding']
         if r.ok:
             speed = round(time.time() - start, 2)

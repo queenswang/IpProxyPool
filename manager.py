@@ -39,18 +39,18 @@ def request_proxy():
         conditions["area"] = area
 
     inquire = Inquire(count,conditions,db)
-    proxys = inquire.quire()  # 返回一个列表，列表元素格式为 [ip,port,score]
+    proxies = inquire.quire()  # 返回一个列表，列表元素格式为 [ip,port,score]
     msg = ""
-    if len(proxys) > 0:
+    if len(proxies) > 0:
         status = "Success"
-        msg = "查到 {} 条代理ip".format(len(proxys))
+        msg = "查到 {} 条代理ip".format(len(proxies))
     else:
         status = "Faild"
         msg = "查询失败"
     data = {
         "status": status,
         "msg":msg,
-        "proxys":proxys
+        "proxies":proxies
     }
     return jsonify(data)
 
